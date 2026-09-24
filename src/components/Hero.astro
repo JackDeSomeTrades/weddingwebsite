@@ -1,0 +1,38 @@
+---
+import site from '../data/site.json';
+import { url } from '../lib/url';
+import Countdown from './Countdown.astro';
+import KolamDivider from './KolamDivider.astro';
+---
+<section class="hero">
+  <p class="invocation" lang="kn">{site.invocation}</p>
+  <p class="blessing" lang="kn">{site.blessing}</p>
+  <h1 class="names script">
+    {site.partner1.en} <span class="amp">&amp;</span> {site.partner2.en}
+  </h1>
+  <p class="names-kn" lang="kn">{site.partner1.kn} ಮತ್ತು {site.partner2.kn}</p>
+  <KolamDivider />
+  <p class="date">{site.dateDisplay}</p>
+  <p class="date-kn" lang="kn">{site.dateDisplayKn}</p>
+  <p class="city">{site.city}</p>
+  <Countdown />
+  <a class="button" href={url('rsvp')}>RSVP</a>
+</section>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: clamp(2rem, 8vw, 5rem) 0 3rem;
+    background-image: var(--bg-hero-image);
+    background-size: cover;
+    background-position: center;
+  }
+  .invocation { font-size: 0.95rem; color: var(--color-muted); margin: 0; }
+  .blessing { font-size: 1.5rem; color: var(--color-gold); margin: 0.5rem 0 0; }
+  .names { font-size: clamp(3rem, 12vw, 6rem); line-height: 1.1; margin: 0.5rem 0 0; color: var(--color-accent); }
+  .amp { color: var(--color-gold); }
+  .names-kn { font-size: 1.35rem; margin: 0.5rem 0 0; }
+  .date { font-size: 1.5rem; margin: 0; letter-spacing: 0.04em; }
+  .date-kn { margin: 0.2rem 0 0; color: var(--color-muted); }
+  .city { font-family: var(--font-ui); font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--color-muted); }
+</style>

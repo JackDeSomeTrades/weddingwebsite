@@ -1,0 +1,23 @@
+---
+// Simple kolam-style divider. Replace with the artist's SVG when ready.
+---
+<div class="kolam" aria-hidden="true">
+  <svg viewBox="0 0 240 40" width="240" height="40">
+    <g fill="none" stroke="currentColor" stroke-width="1.2">
+      <path d="M10 20 H95" />
+      <path d="M145 20 H230" />
+      <path d="M120 6 L134 20 L120 34 L106 20 Z" />
+      <path d="M120 12 L128 20 L120 28 L112 20 Z" />
+      <circle cx="120" cy="20" r="18" stroke-dasharray="2 4" />
+    </g>
+    <g fill="currentColor">
+      <circle cx="120" cy="20" r="2" />
+      <circle cx="100" cy="20" r="1.6" /><circle cx="140" cy="20" r="1.6" />
+      <circle cx="10" cy="20" r="1.6" /><circle cx="230" cy="20" r="1.6" />
+    </g>
+  </svg>
+</div>
+<style>
+  .kolam { display: flex; justify-content: center; color: var(--color-gold); margin: 1.5rem 0; }
+  svg { max-width: 100%; height: auto; }
+</style>

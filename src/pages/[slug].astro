@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Countdown from '../components/Countdown.astro';
+import Gallery from '../components/Gallery.astro';
+
+// One page per Markdown file in src/content/pages (home.md is the index page).
+export async function getStaticPaths() {
+  const pages = await getCollection('pages', (p) => p.id !== 'home');
+  return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+const { title, titleKn, description, background, widget } = page.data;
+---
+<BaseLayout title={title} description={description} current={page.id} background={background}>
+  <header class="page-header">
+    <h1>{title}</h1>
+    {titleKn && <span class="kn" lang="kn">{titleKn}</span>}
+  </header>
+  <article class="prose">
+    <Content />
+    {widget === 'countdown' && <Countdown />}
+    {widget === 'gallery' && <Gallery />}
+  </article>
+</BaseLayout>

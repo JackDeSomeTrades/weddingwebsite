@@ -1,0 +1,34 @@
+---
+import site from '../data/site.json';
+---
+<div class="countdown" data-target={site.muhurtha} aria-live="polite">
+  <div><span data-unit="days">–</span><small>Days · <span lang="kn">ದಿನ</span></small></div>
+  <div><span data-unit="hours">–</span><small>Hours · <span lang="kn">ಗಂಟೆ</span></small></div>
+  <div><span data-unit="minutes">–</span><small>Minutes · <span lang="kn">ನಿಮಿಷ</span></small></div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.countdown').forEach((el) => {
+    const target = new Date(el.dataset.target!).getTime();
+    const set = (unit: string, v: number) => {
+      const node = el.querySelector(`[data-unit="${unit}"]`);
+      if (node) node.textContent = String(v);
+    };
+    const tick = () => {
+      const diff = Math.max(0, target - Date.now());
+      set('days', Math.floor(diff / 86_400_000));
+      set('hours', Math.floor((diff / 3_600_000) % 24));
+      set('minutes', Math.floor((diff / 60_000) % 60));
+    };
+    tick();
+    setInterval(tick, 30_000);
+  });
+</script>
+
+<style>
+  .countdown { display: flex; justify-content: center; gap: clamp(1rem, 5vw, 3rem); margin: 1.5rem 0; }
+  .countdown > div { text-align: center; min-width: 4.5rem; }
+  .countdown span[data-unit] { display: block; font-size: 2.6rem; line-height: 1; color: var(--color-accent); }
+  small { font-family: var(--font-ui); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-muted); }
+  small [lang='kn'] { text-transform: none; letter-spacing: 0; }
+</style>

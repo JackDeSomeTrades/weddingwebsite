@@ -1,0 +1,59 @@
+/* =====================================================================
+   THEME — every colour, font and background lives here.
+   To swap in the artist's designs or your chosen fonts, edit ONLY this file
+   (and the font <link> in src/layouts/BaseLayout.astro).
+   ===================================================================== */
+
+:root {
+  /* ---- Fonts (placeholders — replace with your picks) ---- */
+  --font-en: 'Cormorant Garamond', Georgia, serif;          /* English body & headings */
+  --font-kn: 'Noto Serif Kannada', 'Tunga', serif;            /* Kannada script */
+  --font-script: 'Great Vibes', 'Brush Script MT', cursive;   /* Calligraphy (names, flourishes) */
+  --font-ui: 'Jost', system-ui, sans-serif;                   /* Nav, buttons, small labels */
+
+  /* ---- Colours: modern minimal + watercolour floral (placeholder) ---- */
+  --color-bg: #fcf8f2;          /* ivory paper */
+  --color-surface: #ffffffcc;
+  --color-text: #3b2f2a;
+  --color-muted: #7a6a60;
+  --color-accent: #b5485d;      /* kumkum rose */
+  --color-gold: #b8914a;        /* zari gold */
+  --color-leaf: #6f8f6a;        /* mango-leaf green */
+  --color-marigold: #e8a33d;
+  --color-line: #e7dccd;
+
+  /* ---- Backgrounds (placeholders until the artist's assets arrive) ----
+     Drop an image into public/images/ and set e.g.
+     --bg-floral-image: url('/weddingwebsite/images/floral-bg.webp');     */
+  --bg-floral-image: none;
+  --bg-hero-image: none;
+
+  --radius: 14px;
+  --max-width: 60rem;
+}
+
+/* Background variants, chosen per page via `background:` in the page front-matter */
+body[data-bg='floral'] {
+  background-color: var(--color-bg);
+  background-image:
+    var(--bg-floral-image),
+    radial-gradient(38rem 26rem at -8% -6%, #f3c7c455, transparent 70%),
+    radial-gradient(30rem 22rem at 108% 4%, #f6d9a055, transparent 70%),
+    radial-gradient(34rem 26rem at 104% 104%, #c9dcc155, transparent 70%),
+    radial-gradient(28rem 20rem at -6% 100%, #f1c9d955, transparent 70%);
+  background-attachment: fixed;
+}
+body[data-bg='plain'] {
+  background: var(--color-bg);
+}
+
+/* Kannada text automatically uses the Kannada font. Write it in Markdown as
+   <span lang="kn">ಕನ್ನಡ</span> */
+:lang(kn) {
+  font-family: var(--font-kn);
+  font-weight: 500;
+}
+.script {
+  font-family: var(--font-script);
+  font-weight: 400;
+}
