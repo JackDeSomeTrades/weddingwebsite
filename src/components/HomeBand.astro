@@ -1,0 +1,65 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import { asset, link } from '../lib/url';
+import ImagePlaceholder from './ImagePlaceholder.astro';
+import FloralCluster from './FloralCluster.astro';
+
+interface Props { entry: CollectionEntry<'home'>; index: number }
+const { entry, index } = Astro.props;
+const { title, titleKn, band, image, button } = entry.data;
+const { Content } = await render(entry);
+const hasBody = Boolean(entry.body?.trim());
+---
+<section class={`band band-${band}`}>
+  {band === 'photo' && (
+    <div class="photo">
+      <div class="photo-img" data-parallax="0.15">
+        {image ? <img src={asset(image)} alt={title ?? ''} loading="lazy" /> : <ImagePlaceholder label="Your photo here" seed={index} />}
+      </div>
+    </div>
+  )}
+  {(title || hasBody || button) && (
+    <div class="inner" data-reveal>
+      {band !== 'photo' && <FloralCluster class="icon" />}
+      {title && <h2>{title}</h2>}
+      {titleKn && <p class="kn" lang="kn">{titleKn}</p>}
+      {hasBody && <div class="body"><Content /></div>}
+      {button && (
+        <a class="button band-button" href={link(button.href)}>
+          {button.label} <span aria-hidden="true">⟶</span>
+        </a>
+      )}
+    </div>
+  )}
+</section>
+
+<style>
+  .band { position: relative; padding: clamp(3.5rem, 9vw, 6.5rem) 1rem; text-align: center; overflow: hidden; }
+  .band-color { background: var(--color-band); color: var(--color-band-text); }
+  .band-white { background: color-mix(in srgb, #fff 55%, transparent); }
+  .inner { position: relative; max-width: 38rem; margin: 0 auto; }
+  .inner :global(.icon) { width: 3.2rem; height: 3.2rem; display: block; margin: 0 auto 1rem; animation: drift 7s ease-in-out infinite alternate; }
+  h2 {
+    font-family: var(--font-ui);
+    font-weight: 500;
+    font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .kn { color: var(--color-gold); font-size: 1.15rem; margin: 0.4rem 0 0; }
+  .band-color .kn { color: var(--color-band-accent); }
+  .body { margin-top: 1.25rem; }
+  .body :global(p) { margin: 0 0 1rem; }
+  .band-color .body :global(a) { color: inherit; }
+  .band-button { margin-top: 0.75rem; }
+  .band-color .band-button { background: var(--color-band-text); color: var(--color-band); }
+  .band-color .band-button:hover { background: var(--color-gold); color: #fff; }
+
+  .band-photo { padding: 0; min-height: clamp(18rem, 60vh, 36rem); display: grid; place-items: center; }
+  .photo { position: absolute; inset: 0; overflow: hidden; }
+  .photo-img { position: absolute; left: 0; right: 0; top: -15%; height: 130%; }
+  .photo-img img { width: 100%; height: 100%; object-fit: cover; }
+  .band-photo .inner { z-index: 1; color: #fff; padding: 2rem 1rem; text-shadow: 0 1px 12px #0008; }
+  .band-photo .kn { color: #fff; }
+</style>

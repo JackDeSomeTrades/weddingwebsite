@@ -22,6 +22,11 @@
   --color-marigold: #e8a33d;
   --color-line: #e7dccd;
 
+  /* Coloured bands on the home page */
+  --color-band: #5d7a5f;        /* deep mango-leaf green */
+  --color-band-text: #fdf8ef;
+  --color-band-accent: #f2d38a;
+
   /* ---- Backgrounds (placeholders until the artist's assets arrive) ----
      Drop an image into public/images/ and set e.g.
      --bg-floral-image: url('/weddingwebsite/images/floral-bg.webp');     */
@@ -30,6 +35,7 @@
 
   --radius: 14px;
   --max-width: 60rem;
+  --max-width-wide: 76rem;
 }
 
 /* Background variants, chosen per page via `background:` in the page front-matter */

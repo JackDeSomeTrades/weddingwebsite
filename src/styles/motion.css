@@ -1,0 +1,63 @@
+/* ---------- Scroll reveals (only when JS is running, see BaseLayout) ---------- */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.9s ease,
+    transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--delay, 0s);
+}
+.js [data-reveal='left'] { transform: translateX(-48px); }
+.js [data-reveal='right'] { transform: translateX(48px); }
+.js [data-reveal='zoom'] { transform: scale(0.92); }
+.js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+/* Line drawing: SVG strokes with pathLength="1" draw themselves in */
+.js [data-reveal='draw'] { opacity: 1; transform: none; }
+.js [data-reveal='draw'] .draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 2.4s cubic-bezier(0.6, 0, 0.3, 1);
+  transition-delay: var(--delay, 0s);
+}
+.js [data-reveal='draw'].is-visible .draw { stroke-dashoffset: 0; }
+
+/* ---------- Falling petals ---------- */
+.petal {
+  position: absolute;
+  top: -6%;
+  width: var(--size);
+  height: calc(var(--size) * 1.35);
+  background: var(--color);
+  border-radius: 80% 0 80% 0;
+  box-shadow: 0 0 0 0.5px #b8914a55;
+  opacity: 0.9;
+  animation: petal-fall var(--dur) linear var(--delay) infinite;
+  pointer-events: none;
+}
+@keyframes petal-fall {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+  8% { opacity: 0.9; }
+  50% { transform: translate3d(var(--sway), 55vh, 0) rotate(calc(var(--spin) * 200deg)); }
+  92% { opacity: 0.85; }
+  100% { transform: translate3d(calc(var(--sway) * -0.4), 110vh, 0) rotate(calc(var(--spin) * 400deg)); opacity: 0; }
+}
+
+/* ---------- Gentle drift for floral decorations ---------- */
+@keyframes drift {
+  from { transform: rotate(-3deg) translateY(0); }
+  to { transform: rotate(3deg) translateY(-12px); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .js [data-reveal] { opacity: 1; transform: none; }
+  .js [data-reveal='draw'] .draw { stroke-dashoffset: 0; }
+}

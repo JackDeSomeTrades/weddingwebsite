@@ -1,15 +1,17 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import HomeBand from '../components/HomeBand.astro';
 
 const page = await getEntry('pages', 'home');
 if (!page) throw new Error('Missing src/content/pages/home.md');
-const { Content } = await render(page);
+// Each file in src/content/home is one band, shown in `order`.
+const bands = (await getCollection('home')).sort((a, b) => a.data.order - b.data.order);
 ---
-<BaseLayout title={page.data.title} description={page.data.description} current="home" background={page.data.background}>
+<BaseLayout title={page.data.title} description={page.data.description} current="home" background={page.data.background} width="full">
   <Hero />
-  <article class="prose">
-    <Content />
-  </article>
+  <div id="home-bands">
+    {bands.map((entry, index) => <HomeBand entry={entry} index={index} />)}
+  </div>
 </BaseLayout>

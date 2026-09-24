@@ -1,0 +1,40 @@
+---
+// Placeholder jasmine + marigold + mango-leaf cluster. Swap for the artist's artwork later.
+interface Props { class?: string }
+const { class: className } = Astro.props;
+const leaves = [
+  [100, 100, -35], [100, 100, 20], [100, 100, 75], [100, 100, 130], [100, 100, 200], [100, 100, 260], [100, 100, 310],
+];
+const jasmine = [
+  [52, 58, 11], [150, 62, 9], [60, 150, 10], [142, 146, 8], [100, 38, 7], [30, 104, 7], [170, 106, 7],
+];
+---
+<svg class={className} viewBox="0 0 200 200" aria-hidden="true">
+  <g fill="#7f9f7a" opacity="0.7">
+    {leaves.map(([x, y, a]) => (
+      <path d="M100 100 C 112 80, 112 48, 100 22 C 88 48, 88 80, 100 100 Z" transform={`rotate(${a} ${x} ${y})`} />
+    ))}
+  </g>
+  <g stroke="#6f8f6a" stroke-width="0.6" opacity="0.6" fill="none">
+    {leaves.map(([x, y, a]) => <path d="M100 100 L100 26" transform={`rotate(${a} ${x} ${y})`} />)}
+  </g>
+  <!-- marigold -->
+  <g transform="translate(100 100)">
+    {Array.from({ length: 16 }, (_, i) => (
+      <ellipse rx="7" ry="15" cy="-12" fill="#e8912d" transform={`rotate(${i * 22.5})`} />
+    ))}
+    {Array.from({ length: 12 }, (_, i) => (
+      <ellipse rx="5" ry="10" cy="-8" fill="#f2a93b" transform={`rotate(${i * 30 + 15})`} />
+    ))}
+    <circle r="7" fill="#f9c74f" />
+  </g>
+  <!-- jasmine -->
+  {jasmine.map(([x, y, r]) => (
+    <g transform={`translate(${x} ${y})`}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <ellipse rx={r * 0.45} ry={r} cy={-r * 0.8} fill="#fffdf6" stroke="#e2d6c2" stroke-width="0.6" transform={`rotate(${i * 72})`} />
+      ))}
+      <circle r={r * 0.28} fill="#f2d38a" />
+    </g>
+  ))}
+</svg>

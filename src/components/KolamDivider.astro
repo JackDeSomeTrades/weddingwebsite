@@ -1,18 +1,19 @@
 ---
-// Simple kolam-style divider. Replace with the artist's SVG when ready.
+// Kolam-style divider that draws itself in when scrolled into view. Replace with the artist's SVG later.
 ---
-<div class="kolam" aria-hidden="true">
+<div class="kolam" data-reveal="draw" aria-hidden="true">
   <svg viewBox="0 0 240 40" width="240" height="40">
     <g fill="none" stroke="currentColor" stroke-width="1.2">
-      <path d="M10 20 H95" />
-      <path d="M145 20 H230" />
-      <path d="M120 6 L134 20 L120 34 L106 20 Z" />
-      <path d="M120 12 L128 20 L120 28 L112 20 Z" />
-      <circle cx="120" cy="20" r="18" stroke-dasharray="2 4" />
+      <path class="draw" pathLength="1" d="M95 20 H10" />
+      <path class="draw" pathLength="1" d="M145 20 H230" />
+      <path class="draw" pathLength="1" d="M120 6 L134 20 L120 34 L106 20 Z" />
+      <path class="draw" pathLength="1" d="M120 12 L128 20 L120 28 L112 20 Z" />
+      <path class="draw" pathLength="1" d="M106 20 C 100 8, 88 8, 86 20 C 88 32, 100 32, 106 20" />
+      <path class="draw" pathLength="1" d="M134 20 C 140 8, 152 8, 154 20 C 152 32, 140 32, 134 20" />
     </g>
     <g fill="currentColor">
       <circle cx="120" cy="20" r="2" />
-      <circle cx="100" cy="20" r="1.6" /><circle cx="140" cy="20" r="1.6" />
+      <circle cx="96" cy="20" r="1.4" /><circle cx="144" cy="20" r="1.4" />
       <circle cx="10" cy="20" r="1.6" /><circle cx="230" cy="20" r="1.6" />
     </g>
   </svg>

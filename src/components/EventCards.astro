@@ -1,0 +1,76 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { asset } from '../lib/url';
+import ImagePlaceholder from './ImagePlaceholder.astro';
+import PinIcon from './PinIcon.astro';
+
+type Event = NonNullable<CollectionEntry<'pages'>['data']['events']>[number];
+interface Props { events: Event[] }
+const { events } = Astro.props;
+
+// Group by `day`, keeping the order the events are written in.
+const days = new Map<string, Event[]>();
+for (const e of events) days.set(e.day, [...(days.get(e.day) ?? []), e]);
+let seed = 0;
+---
+{[...days].map(([day, list]) => (
+  <section class="day">
+    <h2 class="day-title" data-reveal>{day}</h2>
+    <div class="cards">
+      {list.map((e, i) => (
+        <article class="card" data-reveal style={`--delay:${(i % 3) * 0.15}s`}>
+          <div class="media">
+            {e.image ? <img src={asset(e.image)} alt={e.title} loading="lazy" /> : <ImagePlaceholder label={e.titleKn ?? e.title} kn={Boolean(e.titleKn)} seed={seed++} />}
+            <span class="badge">{e.time}</span>
+          </div>
+          <div class="body">
+            <h3>{e.title}</h3>
+            {e.titleKn && <p class="kn" lang="kn">{e.titleKn}</p>}
+            {e.venue && <p class="venue"><PinIcon /> {e.venue}</p>}
+            {e.place && <p class="place">{e.place}</p>}
+            {e.address && <p class="address">{e.address}</p>}
+            {e.description && <p class="desc" set:html={e.description} />}
+            {e.dress && <p class="dress"><span>Dress</span> {e.dress}</p>}
+            {e.mapUrl && <a class="map" href={e.mapUrl} target="_blank" rel="noopener">Directions ⟶</a>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+))}
+
+<style>
+  .day { margin: 3rem 0 4rem; }
+  .day-title { text-align: center; font-weight: 400; font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin: 0 0 2rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 2rem; }
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.45s, opacity 0.9s;
+  }
+  .card:hover { transform: translateY(-8px); box-shadow: 0 22px 40px -22px #5a3c2a55; }
+  .media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+  .media img, .media :global(.ph) { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .card:hover .media img, .card:hover .media :global(.ph) { transform: scale(1.07); }
+  .badge {
+    position: absolute; left: 1.25rem; bottom: 1.25rem;
+    background: var(--color-bg); padding: 0.55rem 1.1rem; font-size: 1.2rem;
+    box-shadow: 0 6px 18px -8px #0004;
+  }
+  .body { padding: 1.5rem 1.75rem 1.75rem; flex: 1; display: flex; flex-direction: column; }
+  h3 { font-weight: 400; font-size: 1.8rem; margin: 0; line-height: 1.2; }
+  .kn { color: var(--color-gold); margin: 0.2rem 0 0.5rem; }
+  .venue { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-ui); font-size: 0.95rem; letter-spacing: 0.04em; color: var(--color-muted); margin: 0.75rem 0 0.25rem; }
+  .place { font-style: italic; font-size: 1.25rem; margin: 0.5rem 0 0; }
+  .address { font-family: var(--font-ui); font-size: 0.9rem; color: var(--color-muted); margin: 0.25rem 0 0; }
+  .desc { margin: 0.9rem 0 0; color: var(--color-muted); }
+  .dress { margin: 0.9rem 0 0; font-size: 1rem; }
+  .dress span { font-family: var(--font-ui); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-gold); margin-right: 0.4rem; }
+  .map {
+    margin-top: auto; padding-top: 1.25rem; align-self: flex-start;
+    font-family: var(--font-ui); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none;
+  }
+</style>

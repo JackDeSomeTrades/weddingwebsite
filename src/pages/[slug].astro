@@ -3,6 +3,9 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Countdown from '../components/Countdown.astro';
 import Gallery from '../components/Gallery.astro';
+import EventCards from '../components/EventCards.astro';
+import Timeline from '../components/Timeline.astro';
+import KolamDivider from '../components/KolamDivider.astro';
 
 // One page per Markdown file in src/content/pages (home.md is the index page).
 export async function getStaticPaths() {
@@ -12,16 +15,29 @@ export async function getStaticPaths() {
 
 const { page } = Astro.props;
 const { Content } = await render(page);
-const { title, titleKn, description, background, widget } = page.data;
+const { title, titleKn, description, background, widget, layout, events, timeline } = page.data;
+const hasBody = Boolean(page.body?.trim());
 ---
-<BaseLayout title={title} description={description} current={page.id} background={background}>
+<BaseLayout title={title} description={description} current={page.id} background={background} width={layout === 'prose' ? 'narrow' : 'wide'}>
   <header class="page-header">
-    <h1>{title}</h1>
-    {titleKn && <span class="kn" lang="kn">{titleKn}</span>}
+    <h1 data-reveal>{title}</h1>
+    {titleKn && <span class="kn" lang="kn" data-reveal style="--delay:0.15s">{titleKn}</span>}
+    <KolamDivider />
   </header>
-  <article class="prose">
-    <Content />
-    {widget === 'countdown' && <Countdown />}
-    {widget === 'gallery' && <Gallery />}
-  </article>
+
+  {layout === 'prose' ? (
+    <article class="prose" data-reveal>
+      <Content />
+      {widget === 'countdown' && <Countdown />}
+      {widget === 'gallery' && <Gallery />}
+    </article>
+  ) : (
+    <>
+      {hasBody && <div class="intro" data-reveal><Content /></div>}
+      {layout === 'events' && events && <EventCards events={events} />}
+      {layout === 'timeline' && timeline && <Timeline items={timeline} />}
+      {widget === 'countdown' && <div data-reveal><Countdown /></div>}
+      {widget === 'gallery' && <Gallery />}
+    </>
+  )}
 </BaseLayout>

@@ -1,0 +1,75 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { asset } from '../lib/url';
+import ImagePlaceholder from './ImagePlaceholder.astro';
+
+type Item = NonNullable<CollectionEntry<'pages'>['data']['timeline']>[number];
+interface Props { items: Item[] }
+const { items } = Astro.props;
+---
+<ol class="timeline">
+  {items.map((it, i) => {
+    const flip = i % 2 === 1;
+    return (
+      <li class:list={['item', { flip }]}>
+        <div class="media-wrap" data-reveal={flip ? 'right' : 'left'}>
+          <div class="media">
+            {it.image ? <img src={asset(it.image)} alt={it.title} loading="lazy" /> : <ImagePlaceholder label={it.titleKn ?? it.title} kn={Boolean(it.titleKn)} seed={i} />}
+          </div>
+          {it.label && <span class="label">{it.label}</span>}
+        </div>
+        <span class="dot" aria-hidden="true"></span>
+        <div class="text" data-reveal={flip ? 'left' : 'right'} style="--delay:0.15s">
+          <h3>{it.title}</h3>
+          {it.titleKn && <p class="kn" lang="kn">{it.titleKn}</p>}
+          <p set:html={it.text} />
+        </div>
+      </li>
+    );
+  })}
+</ol>
+
+<style>
+  .timeline { list-style: none; margin: 3rem 0; padding: 0; position: relative; }
+  .timeline::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px;
+    background: linear-gradient(transparent, var(--color-gold) 6%, var(--color-gold) 94%, transparent);
+  }
+  .item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 5rem;
+    align-items: center;
+    margin-bottom: clamp(3rem, 8vw, 6rem);
+  }
+  .item.flip .media-wrap { order: 2; }
+  .item.flip .text { order: 1; text-align: right; }
+  .dot {
+    position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+    width: 12px; height: 12px; rotate: 45deg;
+    background: var(--color-bg); border: 1.5px solid var(--color-gold);
+  }
+  .media-wrap { position: relative; width: 100%; max-width: 26rem; justify-self: end; }
+  .item.flip .media-wrap { justify-self: start; }
+  .media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; max-height: 22rem; box-shadow: 0 24px 40px -28px #5a3c2a66; }
+  .media img, .media :global(.ph) { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .media-wrap:hover img, .media-wrap:hover :global(.ph) { transform: scale(1.05); }
+  .label {
+    position: absolute; left: 50%; bottom: -1.2rem; translate: -50% 0;
+    background: var(--color-bg); padding: 0.5rem 1.3rem; white-space: nowrap;
+    font-size: 1.25rem; color: var(--color-accent);
+    box-shadow: 0 8px 20px -10px #0004;
+  }
+  h3 { font-weight: 400; font-size: clamp(1.7rem, 3.5vw, 2.3rem); margin: 0; line-height: 1.2; }
+  .kn { color: var(--color-gold); margin: 0.3rem 0 0; font-size: 1.1rem; }
+  .text p:last-child { color: var(--color-muted); margin: 0.9rem 0 0; }
+
+  @media (max-width: 760px) {
+    .timeline::before, .dot { display: none; }
+    .item { grid-template-columns: 1fr; row-gap: 2.25rem; }
+    .item.flip .media-wrap { order: 0; }
+    .media-wrap, .item.flip .media-wrap { justify-self: center; }
+    .item.flip .text { text-align: left; }
+  }
+</style>

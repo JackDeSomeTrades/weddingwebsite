@@ -9,8 +9,9 @@ interface Props {
   description?: string;
   current: string;
   background?: string;
+  width?: 'narrow' | 'wide' | 'full';
 }
-const { title, description, current, background = 'floral' } = Astro.props;
+const { title, description, current, background = 'floral', width = 'narrow' } = Astro.props;
 const couple = `${site.partner1.en} & ${site.partner2.en}`;
 const fullTitle = current === 'home' ? couple : `${title} · ${couple}`;
 ---
@@ -22,6 +23,8 @@ const fullTitle = current === 'home' ? couple : `${title} · ${couple}`;
     <title>{fullTitle}</title>
     <meta name="description" content={description ?? `${couple} — ${site.dateDisplay}, ${site.city}`} />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪔</text></svg>" />
+    <!-- Marks JS as available so scroll-reveal styles apply (content stays visible without JS). -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <!-- Placeholder fonts: change these (and the variables in theme.css) when you pick your own -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,7 +35,7 @@ const fullTitle = current === 'home' ? couple : `${title} · ${couple}`;
   </head>
   <body data-bg={background}>
     <Nav current={current} />
-    <main>
+    <main class={width}>
       <slot />
     </main>
     <footer>
@@ -41,5 +44,8 @@ const fullTitle = current === 'home' ? couple : `${title} · ${couple}`;
       {site.dateDisplay} · {site.city}<br />
       {site.hashtag}
     </footer>
+    <script>
+      import '../scripts/motion.ts';
+    </script>
   </body>
 </html>
