@@ -7,7 +7,16 @@ import HomeBand from '../components/HomeBand.astro';
 const page = await getEntry('pages', 'home');
 if (!page) throw new Error('Missing src/content/pages/home.md');
 // Each file in src/content/home is one band, shown in `order`.
-const bands = (await getCollection('home')).sort((a, b) => a.data.order - b.data.order);
+// A band is skipped if it's hidden, or if its button points to a tab that is hidden or removed.
+const livePages = new Set((await getCollection('pages', (p) => !p.data.hidden)).map((p) => p.id));
+const linksToLivePage = (href?: string) => {
+  if (!href || /^(https?:|mailto:|tel:|#)/.test(href)) return true;
+  const id = href.replace(/^\/+|\/+$/g, '').split(/[/#?]/)[0];
+  return id === '' || livePages.has(id);
+};
+const bands = (await getCollection('home'))
+  .filter((b) => !b.data.hidden && linksToLivePage(b.data.button?.href))
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 <BaseLayout title={page.data.title} description={page.data.description} current="home" background={page.data.background} width="full">
   <Hero />

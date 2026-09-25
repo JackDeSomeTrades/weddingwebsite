@@ -9,7 +9,7 @@ import KolamDivider from '../components/KolamDivider.astro';
 
 // One page per Markdown file in src/content/pages (home.md is the index page).
 export async function getStaticPaths() {
-  const pages = await getCollection('pages', (p) => p.id !== 'home');
+  const pages = await getCollection('pages', (p) => p.id !== 'home' && !p.data.hidden);
   return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
 }
 

@@ -8,7 +8,7 @@ const { current } = Astro.props;
 
 // Tabs are generated from src/content/pages/*.md, sorted by `order`.
 const pages = (await getCollection('pages'))
-  .filter((p) => p.data.showInNav)
+  .filter((p) => !p.data.hidden && p.data.showInNav)
   .sort((a, b) => a.data.order - b.data.order);
 
 const href = (id: string) => (id === 'home' ? url() : url(id));

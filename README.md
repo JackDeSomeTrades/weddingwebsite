@@ -72,6 +72,18 @@ widget: countdown             # optional: countdown | gallery
 Your content here…
 ```
 
+### Hiding or removing a tab
+
+| Want to… | Do this |
+|---|---|
+| Switch a tab off completely (no page, no menu link, and its home band disappears) | add `hidden: true` to its front-matter |
+| Keep the page reachable by link, but not in the menu | add `showInNav: false` |
+| Park a file without it being used at all | rename it with a leading underscore, e.g. `_registry.md` |
+| Remove it for good | delete the file |
+
+Home bands work the same way: `hidden: true` or a leading `_` in `src/content/home/`.
+To comment out a single line inside a page, wrap it in `<!-- … -->`.
+
 ### Writing Kannada
 
 Wrap Kannada text so it uses the Kannada font:

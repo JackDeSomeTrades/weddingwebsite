@@ -5,14 +5,20 @@ import { z } from 'astro/zod';
 // Images are paths inside public/, e.g. "/images/events/muhurtha.jpg". Leave out for a placeholder.
 const image = z.string().optional();
 
+// Files whose name starts with "_" (e.g. _registry.md) are ignored entirely.
+const markdown = ['**/*.md', '!**/_*'];
+
 // Every .md file in src/content/pages becomes a tab on the site.
 const pages = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
+  loader: glob({ pattern: markdown, base: './src/content/pages' }),
   schema: z.object({
     title: z.string(),
     titleKn: z.string().optional(),
     description: z.string().optional(),
     order: z.number().default(100),
+    // hidden: true switches the tab off completely (no page, no nav link, no home band linking to it).
+    hidden: z.boolean().default(false),
+    // showInNav: false keeps the page reachable by its link but leaves it out of the menu.
     showInNav: z.boolean().default(true),
     // Key of a background defined in src/styles/theme.css (e.g. "floral", "plain").
     background: z.string().default('floral'),
@@ -53,9 +59,10 @@ const pages = defineCollection({
 
 // Each .md file in src/content/home is one scrolling band on the home page.
 const home = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/home' }),
+  loader: glob({ pattern: markdown, base: './src/content/home' }),
   schema: z.object({
     order: z.number(),
+    hidden: z.boolean().default(false),
     title: z.string().optional(),
     titleKn: z.string().optional(),
     // color = coloured band, white = light band, photo = full-width photo with parallax
