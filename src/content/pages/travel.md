@@ -7,15 +7,15 @@ order: 4
 ## The venue
 
 **Venue name**
-Street address, Bengaluru, Karnataka
+Street address, Mysuru, Karnataka
 
 _Paste a Google Maps embed here: in Google Maps, Share → Embed a map → copy the `<iframe>` into this file._
 
 ## Getting there
 
-- **By air:** Kempegowda International Airport (BLR). About 60–90 minutes to the venue depending on traffic.
-- **By train:** KSR Bengaluru City / Yeshwanthpur.
-- **Local travel:** Ola, Uber and Namma Metro are all convenient.
+- **By air:** Most guests fly into Kempegowda International Airport, Bengaluru (BLR), then drive about 3–4 hours to Mysuru. Mysuru Airport (MYQ) has a few domestic flights.
+- **By train:** Mysuru Junction (MYS). Shatabdi and Vande Bharat trains from Bengaluru take about 2 hours.
+- **Local travel:** Ola, Uber and auto-rickshaws are easy to find around Mysuru.
 
 ## Where to stay
 
@@ -26,5 +26,5 @@ _Paste a Google Maps embed here: in Google Maps, Share → Embed a map → copy 
 
 ## Good to know
 
-- February weather is pleasant, around 15–30 °C.
+- January weather is pleasant, around 16–29 °C, with cool mornings.
 - Useful words: _Namaskara_ (<span lang="kn">ನಮಸ್ಕಾರ</span>) means hello; _Dhanyavadagalu_ (<span lang="kn">ಧನ್ಯವಾದಗಳು</span>) means thank you.
