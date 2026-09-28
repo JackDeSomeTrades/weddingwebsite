@@ -1,7 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import site from '../data/site.json';
-import { url } from '../lib/url';
+import { asset, url } from '../lib/url';
 import Countdown from './Countdown.astro';
 import KolamDivider from './KolamDivider.astro';
 import FloralCluster from './FloralCluster.astro';
@@ -11,6 +11,9 @@ const files = import.meta.glob<{ default: ImageMetadata }>('../assets/hero/*.{jp
 const slides = Object.entries(files)
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([, m]) => m.default);
+
+// Artwork shown only on the landing screen (set "heroArt" in src/data/site.json, or "" to turn it off).
+const art = (site as { heroArt?: string }).heroArt;
 ---
 <section class:list={['hero', { 'hero--photo': slides.length > 0 }]}>
   {slides.length > 0 && (
@@ -18,9 +21,14 @@ const slides = Object.entries(files)
       {slides.map((img, i) => <img src={img.src} alt="" class:list={{ active: i === 0 }} />)}
     </div>
   )}
+  {art && <img class="art" src={asset(art)} alt="" aria-hidden="true" fetchpriority="high" />}
   <div class="petals" data-petals aria-hidden="true"></div>
-  <div class="decor decor-tl" data-parallax="0.18"><FloralCluster class="floral" /></div>
-  <div class="decor decor-br" data-parallax="-0.12"><FloralCluster class="floral floral-alt" /></div>
+  {!art && (
+    <>
+      <div class="decor decor-tl" data-parallax="0.18"><FloralCluster class="floral" /></div>
+      <div class="decor decor-br" data-parallax="-0.12"><FloralCluster class="floral floral-alt" /></div>
+    </>
+  )}
 
   <div class="inner">
     <p class="invocation" lang="kn" data-reveal>{site.invocation}</p>
@@ -66,6 +74,33 @@ const slides = Object.entries(files)
   }
   .inner { position: relative; z-index: 2; max-width: 44rem; }
   .petals { position: absolute; inset: 0; z-index: 3; overflow: hidden; pointer-events: none; }
+
+  /* Landing-screen artwork: anchored bottom-right, white paper blended into the page colour */
+  .art {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    width: min(36vw, 36rem);
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: right bottom;
+    mix-blend-mode: multiply;
+    /* soften the top edge where the artwork is cropped */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%);
+    mask-image: linear-gradient(to bottom, transparent, #000 14%);
+    pointer-events: none;
+    animation: art-in 1.8s ease-out both;
+  }
+  @keyframes art-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (max-width: 900px) {
+    .art { width: 85vw; right: -22vw; opacity: 0.35; animation-name: art-in-soft; }
+    @keyframes art-in-soft { from { opacity: 0; } to { opacity: 0.35; } }
+  }
 
   .decor { position: absolute; z-index: 1; width: clamp(9rem, 26vw, 20rem); pointer-events: none; }
   .decor-tl { top: -2rem; left: -3rem; }
